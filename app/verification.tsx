@@ -90,7 +90,7 @@ const style = StyleSheet.create({
     topMintDiv: {
         height: 250,
         width: '100%',
-        backgroundColor: '#178077',
+        backgroundColor: '#5FAF9E',
         borderBottomLeftRadius: 5,
         borderBottomRightRadius: 5
 

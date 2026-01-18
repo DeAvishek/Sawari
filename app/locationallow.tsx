@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
-
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from "expo-router";
 export default function LocationPermission() {
+    const router = useRouter();
   const onAllow = () => {
     console.log("Allow location");
   };
@@ -12,37 +14,38 @@ export default function LocationPermission() {
 
   return (
     <View style={styles.container}>
-      {/* Top Image Section */}
-      <View style={styles.imageWrapper}>
-        <Image
-          source={require("@/assets/images/Vector.png")}
-          // 🔁 replace later with your own image
-          resizeMode="contain"
-          style={styles.image}
-        />
+      <View style={styles.topImagediv}>
+          <Image
+          style={styles.topimage}
+          resizeMode="cover"
+          source={require("@/assets/images/location.png")}/>
       </View>
-
       {/* Content */}
-      <View style={styles.content}>
-        <Text style={styles.title}>
-          Location permission not enabled
-        </Text>
+      <View style={styles.main}>
+          <LinearGradient
+                  colors={['#5FAF9E', 'transparent']}
+                  style={styles.gradientView}
+                />
+          <View style={styles.content}>
+            <Text style={styles.title}>
+              Location permission not enabled
+            </Text>
+            <Text style={styles.subtitle}>
+              Sharing location permission helps us improve your ride booking and
+              pickup experience
+            </Text>
+          </View>
 
-        <Text style={styles.subtitle}>
-          Sharing location permission helps us improve your ride booking and
-          pickup experience
-        </Text>
-      </View>
+          {/* Buttons */}
+          <View style={styles.buttonWrapper}>
+            <TouchableOpacity style={styles.primaryButton} onPress={onAllow}>
+              <Text style={styles.primaryText}>Allow Permission</Text>
+            </TouchableOpacity>
 
-      {/* Buttons */}
-      <View style={styles.buttonWrapper}>
-        <TouchableOpacity style={styles.primaryButton} onPress={onAllow}>
-          <Text style={styles.primaryText}>Allow Permission</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.secondaryButton} onPress={onManual}>
-          <Text style={styles.secondaryText}>Enter pickup manually</Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={styles.secondaryButton} onPress={()=>router.push("/home")}>
+              <Text style={styles.secondaryText}>Enter pickup manually</Text>
+            </TouchableOpacity>
+          </View>
       </View>
     </View>
   );
@@ -55,22 +58,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8FAFC",
     justifyContent: "space-between",
   },
-
-  imageWrapper: {
-    height: 320,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  image: {
-    width: "90%",
-    height: "90%",
-  },
-
   content: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 30,
+    paddingVertical: 30,
+    zIndex: 1,
   },
-
+  main:{
+     flex:1,
+     justifyContent:'space-between'
+  },
   title: {
     fontSize: 20,
     fontWeight: "700",
@@ -80,13 +76,14 @@ const styles = StyleSheet.create({
 
   subtitle: {
     fontSize: 14,
-    color: "#6B7280",
+    color: "#111827",
     lineHeight: 22,
   },
 
   buttonWrapper: {
     paddingHorizontal: 24,
     paddingBottom: 30,
+    zIndex: 1,
   },
 
   primaryButton: {
@@ -111,10 +108,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
+ gradientView: {
+   position: 'absolute',
+   top: 0,
+   left: 0,
+   right: 0,
+   height: 500,
+   zIndex: 0,
+ },
   secondaryText: {
     color: "#111827",
     fontSize: 15,
     fontWeight: "500",
+  },
+  topImagediv: {
+    height: 300,
+    width: '100%',
+  },
+
+  topimage: {
+    width: '100%',
+    height: '100%',
   },
 });
