@@ -32,19 +32,35 @@ export default function Home() {
                     <Text>//----TODO----//</Text>
                 </View>
                 <View style={styles.middleView2}>
-                    <Text style={styles.textStyle}>E x p l o r ee</Text>
+                    <Text style={styles.textStyle}>E x p l o r e</Text>
                     <View style={styles.middleview2_1}>
                         <View style={styles.smallViewOfVie}>
                             <Image
-                            style={styles.veichelimage}
-                            source={require("@/assets/images/scooty.png")}
+                                style={styles.veichelimage}
+                                source={require("@/assets/images/scooty.png")}
                             />
+                            <Text>Scotter</Text>
                         </View>
-                        <View>
-
+                        <View style={styles.smallViewOfVie}>
+                            <Image
+                                style={styles.veichelimage}
+                                source={require("@/assets/images/bike.png")}
+                            />
+                            <Text>Bike</Text>
                         </View>
-                        <View>
-
+                        <View style={styles.smallViewOfVie}>
+                            <Image
+                                style={styles.veichelimage}
+                                source={require("@/assets/images/taxi.png")}
+                            />
+                            <Text>Taxi</Text>
+                        </View>
+                        <View style={styles.smallViewOfVie}>
+                            <Image
+                                style={styles.veichelimage}
+                                source={require("@/assets/images/metro.png")}
+                            />
+                            <Text>Metro ticket</Text>
                         </View>
                     </View>
                     <View style={styles.middleview2_2}>
@@ -88,39 +104,42 @@ const styles = StyleSheet.create({
         borderRadius: 8
     },
     middleView2: {
-        paddingLeft:5,
-        paddingRight:5,
-        flexDirection:'column',
-        gap:6
+        paddingLeft: 5,
+        paddingRight: 5,
+        flexDirection: 'column',
+        gap: 6
 
     },
-    middleview2_1:{
-        height:170,
-        width:'auto',
+    middleview2_1: {
+        height: 170,
+        width: 'auto',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
-    middleview2_2:{
-        height:170,
-        width:'auto',
-        backgroundColor:'#bfbfbf',
-        borderRadius:10
+    middleview2_2: {
+        height: 170,
+        width: 'auto',
+        backgroundColor: '#bfbfbf',
+        borderRadius: 10
     },
-    middleview2_3:{
-        height:170,
-        width:'auto',
-        backgroundColor:'#805d5d',
-        borderRadius:10
+    middleview2_3: {
+        height: 170,
+        width: 'auto',
+        backgroundColor: '#805d5d',
+        borderRadius: 10
     },
-    smallViewOfVie:{
-        backgroundColor:'#ffff',
-        width:90,
-        height:90,
-        justifyContent:'center',
-        alignItems:'center',
-        borderRadius:10
+    smallViewOfVie: {
+        backgroundColor: '#ffff',
+        width: 90,
+        height: 90,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
     },
-    veichelimage:{
-        width:'80%',
-        height:'80%'
+    veichelimage: {
+        width: '80%',
+        height: '80%'
     },
     textStyle: {
         fontSize: 20,
