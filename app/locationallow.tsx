@@ -23,7 +23,7 @@ export default function LocationPermission() {
       {/* Content */}
       <View style={styles.main}>
           <LinearGradient
-                  colors={['#5FAF9E', 'transparent']}
+                  colors={['#16ecbd', 'transparent']}
                   style={styles.gradientView}
                 />
           <View style={styles.content}>
@@ -39,11 +39,11 @@ export default function LocationPermission() {
           {/* Buttons */}
           <View style={styles.buttonWrapper}>
             <TouchableOpacity style={styles.primaryButton} onPress={onAllow}>
-              <Text style={styles.primaryText}>Allow Permission</Text>
+              <Text style={styles.primaryText}>A l l o w  P e r m i s s i o n</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.secondaryButton} onPress={()=>router.push("/home")}>
-              <Text style={styles.secondaryText}>Enter pickup manually</Text>
+              <Text style={styles.secondaryText}>E n t e r  p i c k u p  m a n u a l l y</Text>
             </TouchableOpacity>
           </View>
       </View>
