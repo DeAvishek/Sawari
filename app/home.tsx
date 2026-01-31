@@ -1,155 +1,176 @@
 import React from "react";
-import { Text, View, StyleSheet, TextInput, Image } from "react-native"
+import {
+    Text,
+    View,
+    StyleSheet,
+    TextInput,
+    Image,
+    Pressable,
+    ScrollView,
+} from "react-native";
+import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from "expo-router";
 export default function Home() {
+    const router = useRouter();
     return (
-        <View style={styles.container}>
-            <LinearGradient
-                colors={['#16ecbd', 'transparent']}
-                style={styles.gradientView}
-            />
-            <SafeAreaView style={styles.main}>
-                {/* this is fro top div with search bar and three dot */}
-                <View style={styles.topView}>
-                    <View>
-                        <Ionicons name='reorder-three' size={50} />
-                    </View>
-                    <View style={{ flexDirection: "row", backgroundColor: '#ffffff', borderRadius: 20 }}>
-                        <Ionicons
-                            name='search'
-                            size={38} />
-                        <TextInput
-                            style={styles.Textinput}
-                            placeholder="W h e r e  a r e  y o u  g o i n g ?"
-                            placeholderTextColor="black"
-                        />
-                    </View>
-                </View>
-                {/* this is middle div with recent visited two destination */}
-                <View style={styles.middleView}>
-                    <Text>//----TODO----//</Text>
-                </View>
-                <View style={styles.middleView2}>
-                    <Text style={styles.textStyle}>E x p l o r e</Text>
-                    <View style={styles.middleview2_1}>
-                        <View style={styles.smallViewOfVie}>
-                            <Image
-                                style={styles.veichelimage}
-                                source={require("@/assets/images/scooty.png")}
-                            />
-                            <Text>Scotter</Text>
-                        </View>
-                        <View style={styles.smallViewOfVie}>
-                            <Image
-                                style={styles.veichelimage}
-                                source={require("@/assets/images/bike.png")}
-                            />
-                            <Text>Bike</Text>
-                        </View>
-                        <View style={styles.smallViewOfVie}>
-                            <Image
-                                style={styles.veichelimage}
-                                source={require("@/assets/images/taxi.png")}
-                            />
-                            <Text>Taxi</Text>
-                        </View>
-                        <View style={styles.smallViewOfVie}>
-                            <Image
-                                style={styles.veichelimage}
-                                source={require("@/assets/images/metro.png")}
-                            />
-                            <Text>Metro ticket</Text>
-                        </View>
-                    </View>
-                    <View style={styles.middleview2_2}>
+        <LinearGradient colors={["#16ecbd", "transparent"]} style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <ScrollView contentContainerStyle={styles.container}>
+                    {/* Top Section */}
+                    <View style={styles.topView}>
+                        <Ionicons name="reorder-three" size={50} />
 
+                        <View style={styles.searchBox}>
+                            <Ionicons name="search" size={28} />
+                            <TextInput
+                                style={styles.Textinput}
+                                placeholder="Where are you going?"
+                                placeholderTextColor="black"
+                            />
+                        </View>
                     </View>
-                    <View style={styles.middleview2_3}>
 
+                    {/* Middle placeholder */}
+                    <View style={styles.middleView}>
+                        <Text>//----TODO----//</Text>
                     </View>
-                </View>
+
+                    {/* Explore Section */}
+                    <View style={styles.middleView2}>
+                        <Text style={styles.textStyle}>Explore</Text>
+
+                        <View style={styles.middleview2_1}>
+                            <Pressable style={styles.smallViewOfVie} onPress={()=>router.push('/#')}>
+                                <Image
+                                    style={styles.veichelimage}
+                                    source={require("@/assets/images/scooty.png")}
+                                />
+                                <Text>Scooter</Text>
+                            </Pressable>
+
+                            <Pressable style={styles.smallViewOfVie}>
+                                <Image
+                                    style={styles.veichelimage}
+                                    source={require("@/assets/images/bike.png")}
+                                />
+                                <Text>Bike</Text>
+                            </Pressable>
+
+                            <Pressable style={styles.smallViewOfVie}>
+                                <Image
+                                    style={styles.veichelimage}
+                                    source={require("@/assets/images/taxi.png")}
+                                />
+                                <Text>Taxi</Text>
+                            </Pressable>
+
+                            <Pressable style={styles.smallViewOfVie} onPress={()=>router.push("/(working)/metroticket")}>
+                                    <Image
+                                        style={styles.veichelimage}
+                                        source={require("@/assets/images/metro.png")}
+                                    />
+                                    <Text>Metro</Text>
+                            </Pressable>
+                        </View>
+
+                        {/* Hurry Card */}
+                        <View style={styles.middleview2_2}>
+                            <View style={{ flex: 1, gap: 10 }}>
+                                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                                    IN HURRY?
+                                </Text>
+                                <Text>An auto will arrive in 10 minutes</Text>
+
+                                <Link href="/autobooking" replace>
+                                    <Text style={{ fontWeight: "bold" }}>Book Now</Text>
+                                </Link>
+                            </View>
+                            <Image
+                                style={styles.autoImage}
+                                source={require("@/assets/images/auto.jpg")}
+                            />
+                        </View>
+
+                        <View style={styles.middleview2_3} />
+                    </View>
+                </ScrollView>
             </SafeAreaView>
-        </View>
-
-    )
+        </LinearGradient>
+    );
 }
+
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: "space-between",
-    },
-    main: {
-        flex: 1,
-        flexDirection: 'column',
+        padding: 10,
         gap: 20,
     },
-    gradientView: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 500,
-        zIndex: 0,
-    },
     topView: {
-        flexDirection: 'row',
-        paddingLeft: 10
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+    },
+    searchBox: {
+        flexDirection: "row",
+        backgroundColor: "#fff",
+        borderRadius: 20,
+        alignItems: "center",
+        paddingHorizontal: 10,
+        flex: 1,
+    },
+    Textinput: {
+        height: 45,
+        flex: 1,
+        paddingHorizontal: 10,
     },
     middleView: {
-        backgroundColor: '#e9eae8',
+        backgroundColor: "#e9eae8",
         height: 190,
-        width: 'auto',
-        borderRadius: 8
+        borderRadius: 8,
+        justifyContent: "center",
+        alignItems: "center",
     },
     middleView2: {
-        paddingLeft: 5,
-        paddingRight: 5,
-        flexDirection: 'column',
-        gap: 6
-
+        gap: 10,
     },
     middleview2_1: {
-        height: 170,
-        width: 'auto',
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexDirection: "row",
+        justifyContent: "space-between",
     },
     middleview2_2: {
-        height: 170,
-        width: 'auto',
-        backgroundColor: '#bfbfbf',
-        borderRadius: 10
+        backgroundColor: "#bfbfbf",
+        borderRadius: 10,
+        padding: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
     },
     middleview2_3: {
         height: 170,
-        width: 'auto',
-        backgroundColor: '#805d5d',
-        borderRadius: 10
+        backgroundColor: "#805d5d",
+        borderRadius: 10,
     },
     smallViewOfVie: {
-        backgroundColor: '#ffff',
+        backgroundColor: "#fff",
         width: 90,
         height: 90,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 10,
     },
     veichelimage: {
-        width: '80%',
-        height: '80%'
+        width: "80%",
+        height: "80%",
     },
     textStyle: {
         fontSize: 20,
-        fontWeight: 'bold'
+        fontWeight: "bold",
     },
-    Textinput: {
-        height: 50,
-        backgroundColor: '#ffffff',
-        borderRadius: 20,
-        width: 300,
-        paddingHorizontal: 15,
+    autoImage: {
+        height: 150,
+        width: 160,
+        borderRadius: 10,
     },
-})
+});
