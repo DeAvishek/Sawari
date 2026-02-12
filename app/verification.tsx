@@ -1,9 +1,9 @@
-import { useState,useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity,Button } from 'react-native'
-import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from "expo-router";
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 const verification = () => {
     const RESEND_TIME = 10
     //need to set 30
@@ -27,9 +27,9 @@ const verification = () => {
              },1000*1)
          return ()=>clearInterval(interval)
         },[timer])
-    const onPressResend=()=>{
-        router.push("/index")
-        }
+    // const onPressResend=()=>{
+    //     router.push("/index")
+    //     }
     return (
         <View style={style.container}>
             <View style={style.topMintDiv}>
@@ -117,7 +117,7 @@ const style = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 20,
         flex:1,
-        gap:450
+        gap:350
 
     },
     codeFieldRoot: { marginBottom: 20, flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
