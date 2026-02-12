@@ -1,18 +1,19 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { LinearGradient } from "expo-linear-gradient";
+import { Link, useRouter } from "expo-router";
 import React from "react";
 import {
-    Text,
-    View,
-    StyleSheet,
-    TextInput,
     Image,
     Pressable,
     ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
-import { Link } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { useRouter } from "expo-router";
+import Mapview from "./components/mapview";
+
 export default function Home() {
     const router = useRouter();
     return (
@@ -35,7 +36,7 @@ export default function Home() {
 
                     {/* Middle placeholder */}
                     <View style={styles.middleView}>
-                        <Text>//----TODO----//</Text>
+                        <Mapview/>
                     </View>
 
                     {/* Explore Section */}
@@ -43,14 +44,13 @@ export default function Home() {
                         <Text style={styles.textStyle}>Explore</Text>
 
                         <View style={styles.middleview2_1}>
-                            <Pressable style={styles.smallViewOfVie} onPress={()=>router.push('/#')}>
+                            <Pressable style={styles.smallViewOfVie}>
                                 <Image
                                     style={styles.veichelimage}
                                     source={require("@/assets/images/scooty.png")}
                                 />
                                 <Text>Scooter</Text>
                             </Pressable>
-
                             <Pressable style={styles.smallViewOfVie}>
                                 <Image
                                     style={styles.veichelimage}
@@ -67,12 +67,12 @@ export default function Home() {
                                 <Text>Taxi</Text>
                             </Pressable>
 
-                            <Pressable style={styles.smallViewOfVie} onPress={()=>router.push("/(working)/metroticket")}>
-                                    <Image
-                                        style={styles.veichelimage}
-                                        source={require("@/assets/images/metro.png")}
-                                    />
-                                    <Text>Metro</Text>
+                            <Pressable style={styles.smallViewOfVie} onPress={() => router.push("/(working)/metroticket")}>
+                                <Image
+                                    style={styles.veichelimage}
+                                    source={require("@/assets/images/metro.png")}
+                                />
+                                <Text>Metro</Text>
                             </Pressable>
                         </View>
 
@@ -84,7 +84,7 @@ export default function Home() {
                                 </Text>
                                 <Text>An auto will arrive in 10 minutes</Text>
 
-                                <Link href="/autobooking" replace>
+                                <Link href="/autobooking">
                                     <Text style={{ fontWeight: "bold" }}>Book Now</Text>
                                 </Link>
                             </View>
@@ -127,10 +127,12 @@ const styles = StyleSheet.create({
     },
     middleView: {
         backgroundColor: "#e9eae8",
-        height: 190,
-        borderRadius: 8,
+        height: 300,
+        borderColor:'balck',
+        borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
+        overflow:'hidden'
     },
     middleView2: {
         gap: 10,
@@ -154,8 +156,8 @@ const styles = StyleSheet.create({
     },
     smallViewOfVie: {
         backgroundColor: "#fff",
-        width: 90,
-        height: 90,
+        width: 80,
+        height: 80,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 10,
