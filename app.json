@@ -21,7 +21,12 @@
       },
       "permissions":["ACCESS_FINE_LOCATION"],
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD0G73tyEqcjL5eAChEZor9gpqcL32_yIg"
+        }
+      }
     },
     "web": {
       "output": "static",
