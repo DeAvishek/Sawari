@@ -1,17 +1,48 @@
-import { Image, Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import * as Notifications from "expo-notifications";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
-
+import React, { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { LoginFormData, LoginScheam } from "./schema/Loginschema";
 export default function Index() {
+  const url = "http://192.168.0.117:8088/Rider/create_user"
   const router = useRouter();
-  const [name, setName] = useState("");
-
-  const onPressOnNext = () => {
-    setName("");
-    console.log(name)
-    router.push("/verification");
-
+  const { handleSubmit, control, formState: {errors}, } = useForm<LoginFormData>({
+    resolver: zodResolver(LoginScheam),
+    defaultValues: {
+      userName: "",
+      phoneNumber: "",
+    }
+  })
+  useEffect(()=>{
+    const configureNotifiaction = async()=>{
+      const response = await Notifications.requestPermissionsAsync()
+      
+    }
+    configureNotifiaction();
+  },[])
+  const onPressOnNext = async(data: LoginFormData) => {
+    try{
+      const response = await axios.post(url,data)
+      if(response.status===200 || response.status===201){
+        await Notifications.scheduleNotificationAsync({
+          content:{
+            title:"Login Successful 🎉",
+            body:`Welcome ${data.userName}`,
+          },
+          trigger:null
+        })
+        console.log(response.data)
+        router.push("/verification");
+      }      
+    }catch{
+      return;
+    }
+    
   };
+
 
   return (
     <View style={styles.container}>
@@ -32,30 +63,49 @@ export default function Index() {
           <View style={styles.inputSection}>
             <View style={styles.inputBlock}>
               <Text style={styles.TextStyle}>What's Your Name?</Text>
-              <TextInput
-                style={styles.Textinput}
-                placeholder="Enter your name"
-                placeholderTextColor="#999"
-                value={name}
-                onChangeText={setName}
+              <Controller
+                control={control}
+                name="userName"
+
+                render={({ field: { onChange, value } }) => (
+                  <>
+                    <TextInput
+                      style={styles.Textinput}
+                      placeholder="Enter your name"
+                      placeholderTextColor="#999"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                  </>
+                )}
               />
+              {errors.userName && <Text style={{color:'red'}}>{errors.userName.message}</Text>}
+
             </View>
 
             <View style={styles.inputBlock}>
               <Text style={styles.TextStyle}>What's Your Number?</Text>
-              <TextInput
-                style={styles.Textinput}
-                keyboardType="phone-pad"
-                placeholder="Enter your number"
-                placeholderTextColor="#999"
-                maxLength={10}
+              <Controller
+                control={control}
+                name="phoneNumber"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={styles.Textinput}
+                    keyboardType="phone-pad"
+                    placeholder="Enter your number"
+                    placeholderTextColor="#999"
+                    maxLength={10}
+                    value={value}
+                    onChangeText={onChange}
+                  />
+                )}
               />
             </View>
           </View>
 
           {/* ===== BUTTON SECTION ===== */}
           <View style={styles.buttonSection}>
-            <TouchableOpacity style={styles.button} onPress={onPressOnNext}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit(onPressOnNext)}>
               <Text style={styles.buttonText}>N e x t</Text>
             </TouchableOpacity>
 
@@ -100,7 +150,7 @@ const styles = StyleSheet.create({
 
   LoginChild: {
     flex: 1,
-    gap:150, // 🔥 KEY LINE
+    gap: 150, // 🔥 KEY LINE
   },
 
   /* INPUT SECTION */

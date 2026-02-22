@@ -1,7 +1,10 @@
 
+
 import { useEffect, useState } from "react";
+
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import Websocket from "../service/Websocket";
 const metroticket = () => {
   const [message, setmessage] = useState<{
@@ -27,6 +30,7 @@ const metroticket = () => {
     Websocket.publish("/sawari/sendTrip", body)
 
   }
+ 
   return (
     <SafeAreaView>
       <View>
