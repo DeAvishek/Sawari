@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 const verification = () => {
-    const RESEND_TIME = 10
+    const RESEND_TIME = 30
     //need to set 30
     const [timer, setTimer] = useState(RESEND_TIME);
     const navigation = useNavigation()

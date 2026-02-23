@@ -1,44 +1,65 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import * as Notifications from "expo-notifications";
+import * as Notification from "expo-notifications";
 import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { LoginFormData, LoginScheam } from "./schema/Loginschema";
+import { LoginFormData, LoginSchema } from "./schema/Loginschema";
+import UserDataStorage from "./store/UserStorage";
+Notification.setNotificationHandler({
+  handleNotification:async()=>({
+    shouldPlaySound:true,
+    shouldSetBadge:true,
+    shouldShowBanner:true,
+    shouldShowList:true
+  })
+})
 export default function Index() {
   const url = "http://192.168.0.117:8088/Rider/create_user"
   const router = useRouter();
+  const setUserIdinStore = UserDataStorage(state=>state.setTempUserId);
   const { handleSubmit, control, formState: {errors}, } = useForm<LoginFormData>({
-    resolver: zodResolver(LoginScheam),
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       userName: "",
       phoneNumber: "",
     }
   })
   useEffect(()=>{
-    const configureNotifiaction = async()=>{
-      const response = await Notifications.requestPermissionsAsync()
-      
+    const notificationPermission=async()=>{
+      const {granted} = await Notification.requestPermissionsAsync()
+      if(!granted){
+        window.alert("Notification is not granted")
+      }
     }
-    configureNotifiaction();
-  },[])
+    notificationPermission()
+  })
   const onPressOnNext = async(data: LoginFormData) => {
     try{
       const response = await axios.post(url,data)
       if(response.status===200 || response.status===201){
-        await Notifications.scheduleNotificationAsync({
+        await Notification.scheduleNotificationAsync({
           content:{
-            title:"Login Successful 🎉",
-            body:`Welcome ${data.userName}`,
+            title:"Welcome to sawari",
+            body:`Welcome user ${response.data.userName}`
           },
           trigger:null
         })
-        console.log(response.data)
+        console.log(response.data)  //todo to remove
+        setUserIdinStore(response.data?.id||"") //set in store
         router.push("/verification");
-      }      
-    }catch{
-      return;
+      }     
+    }catch(error:any){
+      if(error.response){
+        await Notification.scheduleNotificationAsync({
+          content:{
+            title:"Somthing went wrong",
+            body:`${error.response.data}`
+          },
+          trigger:null
+        })
+      }
     }
     
   };
@@ -66,7 +87,6 @@ export default function Index() {
               <Controller
                 control={control}
                 name="userName"
-
                 render={({ field: { onChange, value } }) => (
                   <>
                     <TextInput
@@ -79,7 +99,7 @@ export default function Index() {
                   </>
                 )}
               />
-              {errors.userName && <Text style={{color:'red'}}>{errors.userName.message}</Text>}
+              {errors.userName && <Text style={{color:'balck'}}>{errors.userName.message}</Text>}
 
             </View>
 
@@ -100,6 +120,7 @@ export default function Index() {
                   />
                 )}
               />
+              {errors.phoneNumber && <Text style={{color:"black"}}>{errors.phoneNumber.message}</Text>}
             </View>
           </View>
 
