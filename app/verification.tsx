@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 const verification = () => {
-    const RESEND_TIME = 30
+    const RESEND_TIME = 5
     //need to set 30
     const [timer, setTimer] = useState(RESEND_TIME);
     const navigation = useNavigation()
@@ -17,7 +17,7 @@ const verification = () => {
         value,
         setValue,
     });
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter()
     useEffect(() => {
         if (timer == 0) {
@@ -28,9 +28,13 @@ const verification = () => {
         }, 1000 * 1)
         return () => clearInterval(interval)
     }, [timer])
-    // const onPressResend=()=>{
-    //     router.push("/index")
-    //     }
+    const onPressOnNext=()=>{
+        console.log("This is Otp",value);
+    }
+    const onPressOnResendForOtp=()=>{
+        //need to do
+        console.log("clicekd on onPressOnResendForOtp")
+    }
     return (
         <View style={style.container}>
             <View style={style.topMintDiv}>
@@ -38,7 +42,7 @@ const verification = () => {
                     <TouchableOpacity
                         style={style.backButton}
                         onPress={() => navigation.goBack()}
-                    >
+                    > 
                         <Ionicons name="arrow-back" size={24} color="#000" />
                     </TouchableOpacity>
                     <Text style={style.TextStyle}>Verify OTP</Text>
@@ -75,15 +79,17 @@ const verification = () => {
                         )}
                     />
                     {loading ?
-                        (<View>
-                            <Text>Resend in <Text style={{ color: '#178077' }}>{timer}</Text></Text>
-                        </View>) :
-                        (<TouchableOpacity style={style.resendButtonStyle}>
+                        (
+                            <TouchableOpacity style={style.resendButtonStyle}>
+                            <Text style={style.buttonText}>Resend in <Text style={{color:'red'}}>{timer}</Text></Text>
+                            </TouchableOpacity>
+                        ) :
+                        (<TouchableOpacity style={style.resendButtonStyle} onPress={onPressOnResendForOtp}>
                             <Text style={style.buttonText}>Resend Otp</Text>
                         </TouchableOpacity>
                         )}
                 </View>
-                <TouchableOpacity style={style.button} onPress={() => router.push("/locationallow")}>
+                <TouchableOpacity style={style.button} onPress={onPressOnNext}>
                     <Text style={style.buttonText}>N e x t</Text>
                 </TouchableOpacity>
             </View>

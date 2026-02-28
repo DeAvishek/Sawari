@@ -1,20 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import * as Notification from "expo-notifications";
+// import * as Notification from "expo-notifications";
 import { useRouter } from "expo-router";
-import React, { useEffect } from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { LoginFormData, LoginSchema } from "./schema/Loginschema";
 import UserDataStorage from "./store/UserStorage";
-Notification.setNotificationHandler({
-  handleNotification:async()=>({
-    shouldPlaySound:true,
-    shouldSetBadge:true,
-    shouldShowBanner:true,
-    shouldShowList:true
-  })
-})
+// Notification.setNotificationHandler({
+//   handleNotification:async()=>({
+//     shouldPlaySound:true,
+//     shouldSetBadge:true,
+//     shouldShowBanner:true,
+//     shouldShowList:true
+//   })
+// })
 export default function Index() {
   const url = "http://192.168.0.117:8088/Rider/create_user"
   const router = useRouter();
@@ -26,40 +26,41 @@ export default function Index() {
       phoneNumber: "",
     }
   })
-  useEffect(()=>{
-    const notificationPermission=async()=>{
-      const {granted} = await Notification.requestPermissionsAsync()
-      if(!granted){
-        window.alert("Notification is not granted")
-      }
-    }
-    notificationPermission()
-  })
+  // useEffect(()=>{
+  //   const notificationPermission=async()=>{
+  //     const {granted} = await Notification.requestPermissionsAsync()
+  //     if(!granted){
+  //       window.alert("Notification is not granted")
+  //     }
+  //   }
+  //   notificationPermission()
+  // })
   const onPressOnNext = async(data: LoginFormData) => {
     try{
       const response = await axios.post(url,data)
       if(response.status===200 || response.status===201){
-        await Notification.scheduleNotificationAsync({
-          content:{
-            title:"Welcome to sawari",
-            body:`Welcome user ${response.data.userName}`
-          },
-          trigger:null
-        })
+        // await Notification.scheduleNotificationAsync({
+        //   content:{
+        //     title:"Welcome to sawari",
+        //     body:`Welcome user ${response.data.userName}`
+        //   },
+        //   trigger:null
+        // })
         console.log(response.data)  //todo to remove
         setUserIdinStore(response.data?.id||"") //set in store
         router.push("/verification");
       }     
     }catch(error:any){
-      if(error.response){
-        await Notification.scheduleNotificationAsync({
-          content:{
-            title:"Somthing went wrong",
-            body:`${error.response.data}`
-          },
-          trigger:null
-        })
-      }
+      // if(error.response){
+      //   await Notification.scheduleNotificationAsync({
+      //     content:{
+      //       title:"Somthing went wrong",
+      //       body:`${error.response.data}`
+      //     },
+      //     trigger:null
+      //   })
+      // }
+      console.log(error.response.data)
     }
     
   };
@@ -132,7 +133,7 @@ export default function Index() {
 
             <Text style={styles.orText}>OR</Text>
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={()=>router.push("/verification")}>
               <Text style={styles.buttonText}>L o g i n OR S i g n u p</Text>
             </TouchableOpacity>
           </View>
