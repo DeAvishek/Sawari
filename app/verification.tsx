@@ -1,13 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from "expo-router";
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 const verification = () => {
-    const RESEND_TIME = 5
-    //need to set 30
+    const API_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+    const RESEND_TIME = 5 //need to set 30
     const [timer, setTimer] = useState(RESEND_TIME);
     const navigation = useNavigation()
     const CELL_COUNT = 6
@@ -28,8 +29,24 @@ const verification = () => {
         }, 1000 * 1)
         return () => clearInterval(interval)
     }, [timer])
-    const onPressOnNext=()=>{
-        console.log("This is Otp",value);
+    const onPressOnNext=async()=>{
+        const RiderID = 152 //need to popluate from store
+        console.log(API_URL);//todo need to remove
+        const body={
+            otp:value
+        }
+        try{
+            const response = await axios.post(`${API_URL}/Rider/verify/${RiderID}`,body)
+            if(response.status===200){
+                //step1:after success need to send some notification
+                //step2:store the bearer in store for user
+                //step3:route to next page most likely home
+                console.log(response.data) //todo need to remove
+            }
+        }
+        catch(error:any){
+            console.log(error.response.data)
+        }
     }
     const onPressOnResendForOtp=()=>{
         //need to do

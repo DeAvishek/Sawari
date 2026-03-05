@@ -9,11 +9,13 @@ type user={
 type UserDataType={
     tempuserId:number|null,
     jwt_token:string|null,
+    phone_number:string|null,
     user:user|null
 }
 type Actions={
     setTempUserId: (id: number) => void;
     setUserData:(jwt_token:string,user:user)=>void
+    setUserPhoneNumber:(phno:string)=>void
     clearuserId:()=>void
     clearUserData:()=>void
 }
@@ -23,9 +25,11 @@ const UserDataStorage = create<UserDataType & Actions>()(
       tempuserId:null,
       jwt_token:null,
       user:null,
+      phone_number:null,
 
       setTempUserId: (id)=>set({tempuserId:id}),
       setUserData: (jwt_token,user)=>set({jwt_token:jwt_token,user:user}),
+      setUserPhoneNumber:(phno)=>set({phone_number:phno}),
       clearuserId:()=>
         set({tempuserId:null}),
       clearUserData:()=> set({jwt_token:null,user:null})
