@@ -16,9 +16,11 @@ import UserDataStorage from "./store/UserStorage";
 //   })
 // })
 export default function Index() {
-  const url = "http://192.168.0.117:8088/Rider/create_user"
+  const API_URl = process.env.EXPO_PUBLIC_BACKEND_URL;
   const router = useRouter();
   const setUserIdinStore = UserDataStorage(state=>state.setTempUserId);
+  const setPhinStore = UserDataStorage(state=>state.setUserPhoneNumber);
+  const setUserinStroe = UserDataStorage(state=>state.setUser)
   const { handleSubmit, control, formState: {errors}, } = useForm<LoginFormData>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -37,7 +39,7 @@ export default function Index() {
   // })
   const onPressOnNext = async(data: LoginFormData) => {
     try{
-      const response = await axios.post(url,data)
+      const response = await axios.post(`${API_URl}/Rider/create_user`,data)
       if(response.status===200 || response.status===201){
         // await Notification.scheduleNotificationAsync({
         //   content:{
@@ -48,6 +50,10 @@ export default function Index() {
         // })
         console.log(response.data)  //todo to remove
         setUserIdinStore(response.data?.id||"") //set in store
+        setPhinStore(response.data?.phoneNumber||"");
+        setUserinStroe({userName:response.data?.userName,
+                        role:response.data?.role,
+                        verified:response.data.isVerified});
         router.push("/verification");
       }     
     }catch(error:any){
@@ -134,7 +140,7 @@ export default function Index() {
             <Text style={styles.orText}>OR</Text>
 
             <TouchableOpacity style={styles.button} onPress={()=>router.push("/verification")}>
-              <Text style={styles.buttonText}>L o g i n OR S i g n u p</Text>
+              <Text style={styles.buttonText}>L o g i n</Text>
             </TouchableOpacity>
           </View>
 

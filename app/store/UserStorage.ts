@@ -14,10 +14,12 @@ type UserDataType={
 }
 type Actions={
     setTempUserId: (id: number) => void;
-    setUserData:(jwt_token:string,user:user)=>void
+    setJwt:(jwt_token:string)=>void
     setUserPhoneNumber:(phno:string)=>void
     clearuserId:()=>void
-    clearUserData:()=>void
+    clearUserJwt:()=>void
+    setUser:(User:user)=>void
+    clearUser:()=>void
 }
 const UserDataStorage = create<UserDataType & Actions>()(
   persist(
@@ -26,13 +28,16 @@ const UserDataStorage = create<UserDataType & Actions>()(
       jwt_token:null,
       user:null,
       phone_number:null,
-
+      
       setTempUserId: (id)=>set({tempuserId:id}),
-      setUserData: (jwt_token,user)=>set({jwt_token:jwt_token,user:user}),
+      setJwt:(jwt_token)=>set({jwt_token:jwt_token}),
       setUserPhoneNumber:(phno)=>set({phone_number:phno}),
       clearuserId:()=>
         set({tempuserId:null}),
-      clearUserData:()=> set({jwt_token:null,user:null})
+      clearUserJwt:()=> set({jwt_token:null}),
+      clearUserPhoneNumber:()=>set({phone_number:null}),
+      setUser:(User:user)=>set({user:User}),
+      clearUser:()=>set({user:null})
     }),
     {
       name: "User_Data_store",

@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
+import UserDataStorage from './store/UserStorage';
 const verification = () => {
     const API_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
     const RESEND_TIME = 5 //need to set 30
@@ -29,19 +30,25 @@ const verification = () => {
         }, 1000 * 1)
         return () => clearInterval(interval)
     }, [timer])
+    //populate item from userStore;
+    const {phone_number,tempuserId} = UserDataStorage();
+    const setUserJwt = UserDataStorage(state=>state.setJwt)
+    //phnumber modify
     const onPressOnNext=async()=>{
-        const RiderID = 152 //need to popluate from store
-        console.log(API_URL);//todo need to remove
         const body={
             otp:value
         }
         try{
-            const response = await axios.post(`${API_URL}/Rider/verify/${RiderID}`,body)
+            console.log(`${API_URL}/Rider/verify/${tempuserId}`) //need to remove
+            const response = await axios.post(`${API_URL}/Rider/verify/${tempuserId}`,body)
             if(response.status===200){
                 //step1:after success need to send some notification
                 //step2:store the bearer in store for user
-                //step3:route to next page most likely home
+                
                 console.log(response.data) //todo need to remove
+                setUserJwt(response.data?.bearer)
+                //step3:route to next page most likely home
+                router.push("/home")
             }
         }
         catch(error:any){
@@ -50,6 +57,7 @@ const verification = () => {
     }
     const onPressOnResendForOtp=()=>{
         //need to do
+        router.push("/home")
         console.log("clicekd on onPressOnResendForOtp")
     }
     return (
@@ -65,7 +73,7 @@ const verification = () => {
                     <Text style={style.TextStyle}>Verify OTP</Text>
                     <View>
                         <Text style={style.TextStyle}>Enter Verification Code</Text>
-                        <Text style={{ fontSize: 15 }}>Send to +91****00**78</Text>
+                        <Text style={{ fontSize: 15 }}>Send to +91{phone_number}</Text>
                     </View>
                 </View>
             </View>

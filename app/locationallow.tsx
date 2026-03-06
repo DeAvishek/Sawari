@@ -10,7 +10,6 @@ export default function LocationPermission() {
   const set_Location_Coords= LocationDataStore((state)=>state.setLocationData);
   const AllowLocationPermission = async () => {
     try {
-      console.log("button pressed")
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
@@ -51,10 +50,6 @@ export default function LocationPermission() {
         <View style={styles.buttonWrapper}>
           <TouchableOpacity style={styles.primaryButton} onPress={AllowLocationPermission}>
             <Text style={styles.primaryText}>A l l o w  P e r m i s s i o n</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.secondaryButton} onPress={() => router.push("/home")}>
-            <Text style={styles.secondaryText}>E n t e r  p i c k u p  m a n u a l l y</Text>
           </TouchableOpacity>
         </View>
       </View>
