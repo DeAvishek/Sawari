@@ -11,15 +11,20 @@ import {
     View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Menu from "./modal/menu";
 import Sourcedest from "./modal/sourcedest";
 import UserDataStorage from "./store/UserStorage";
 export default function Home() {
     //populate jwt from store
     const { jwt_token } = UserDataStorage();
     const [modalVisisble, setmodalVisisble] = React.useState<boolean>(false)
+    const [menuVisible,setmenuVisisble] = React.useState<boolean>(false);
     const router = useRouter();
     const onmodelClose = () => {
         setmodalVisisble(false)
+    }
+    const onMenuClose=()=>{
+        setmenuVisisble(false)
     }
     return (
         <LinearGradient colors={["#16ecbd", "transparent"]} style={{ flex: 1 }}>
@@ -30,12 +35,14 @@ export default function Home() {
                 >
                     {/* Top Section */}
                     <View style={styles.topView}>
-                        <Ionicons name="reorder-three" size={50} />
+                        <Pressable onPress={()=>setmenuVisisble(true)}>
+                            <Ionicons name="reorder-three" size={50} />
+                        </Pressable>
                         <Pressable
                             style={styles.searchBox}
                             onPress={() => setmodalVisisble(true)}>
                             <Ionicons name="search" size={28} />
-                            <Text style={{ marginLeft: 10,fontWeight:'bold'}}>Where are you going?</Text>
+                            <Text style={{ marginLeft: 10, fontWeight: 'bold' }}>Where are you going?</Text>
                         </Pressable>
                     </View>
 
@@ -43,6 +50,7 @@ export default function Home() {
                     <View style={styles.middleView}>
                         <Text>Recent trip detials</Text>
                     </View>
+                    <Menu menuVisisble={menuVisible} oncloseMenu={onMenuClose}/>
 
                     {/* Explore Section */}
                     <View style={styles.middleView2}>
@@ -131,7 +139,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: 10,
         flex: 1,
-        height:45
+        height: 45
     },
     Textinput: {
         height: 45,
