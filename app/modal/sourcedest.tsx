@@ -63,12 +63,14 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-
-          <Text style={styles.title}>Choose Location</Text>
-
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.title}>Choose Location</Text>
+            <Pressable onPress={onClose} style={{backgroundColor:'black',borderRadius:10,height:30,width:30}}>
+              <Ionicons name="close-sharp" size={30} color="#d97777" />
+            </Pressable>
+          </View>
           <View style={styles.inputContainer}>
             <Ionicons name="location-outline" size={20} color="#555" />
-
             <TextInput
               placeholder="Enter Source"
               placeholderTextColor="#dcdcdc"
@@ -102,8 +104,8 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
               <Text>{item.display_name}</Text>
             </Pressable>
           ))}
-          <Pressable style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeText}>Close</Text>
+          <Pressable style={styles.BookRideButton} onPress={onClose}>
+            <Text style={styles.closeText}>Book Ride</Text>
           </Pressable>
 
         </View>
@@ -163,9 +165,9 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
 
-  closeButton: {
+  BookRideButton: {
     marginTop: 15,
-    backgroundColor: "#111",
+    backgroundColor: "#0F766E",
     padding: 12,
     borderRadius: 10,
     alignItems: "center"

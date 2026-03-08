@@ -27,7 +27,7 @@ export default function Home() {
         setmenuVisisble(false)
     }
     return (
-        <LinearGradient colors={["#16ecbd", "transparent"]} style={{ flex: 1 }}>
+        <LinearGradient colors={["#16ecbd","#16ecbd" ,"transparent"]} style={{ flex: 1 }}>
             <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView
                     contentContainerStyle={styles.container}
@@ -50,7 +50,7 @@ export default function Home() {
                     <View style={styles.middleView}>
                         <Text>Recent trip detials</Text>
                     </View>
-                    
+
 
                     {/* Explore Section */}
                     <View style={styles.middleView2}>
@@ -106,15 +106,17 @@ export default function Home() {
                                 source={require("@/assets/images/auto.jpg")}
                             />
                         </View>
-
-                        <View style={styles.middleview2_3}>
-                            <Image
-                                style={{ height: 200, width: '100%',borderRadius:10}}
-                                source={require("@/assets/images/homepageBanner.png")}
-                                resizeMode="cover"
-                            />
-                        </View>
                     </View>
+                    <View>
+                        <Image
+                            style={{ height: 350, width: '100%', borderRadius: 10,opacity:0.07}}
+                            source={require("@/assets/images/Gemini_Generated_Image_g8b9mng8b9mng8b9.png")}
+                            resizeMode="cover"
+                        />
+                        <Text style={{color:'#7f7f7f',fontSize:30,fontWeight:'900'}}>#GoSawari</Text>
+                        <Text>India ❤️</Text>
+                    </View>
+                
                 </ScrollView>
                 <Sourcedest modalVisible={modalVisisble} onClose={onmodelClose} />
                 <Menu menuVisisble={menuVisible} oncloseMenu={onMenuClose} />
@@ -171,11 +173,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         gap: 10,
     },
-    middleview2_3: {
-        height: 200,
-        backgroundColor: "#aea0a0",
-        borderRadius: 10,
-    },
+
     smallViewOfVie: {
         backgroundColor: "#fff",
         width: 80,
