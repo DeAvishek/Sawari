@@ -18,12 +18,12 @@ export default function Home() {
     //populate jwt from store
     const { jwt_token } = UserDataStorage();
     const [modalVisisble, setmodalVisisble] = React.useState<boolean>(false)
-    const [menuVisible,setmenuVisisble] = React.useState<boolean>(false);
+    const [menuVisible, setmenuVisisble] = React.useState<boolean>(false);
     const router = useRouter();
     const onmodelClose = () => {
         setmodalVisisble(false)
     }
-    const onMenuClose=()=>{
+    const onMenuClose = () => {
         setmenuVisisble(false)
     }
     return (
@@ -35,7 +35,7 @@ export default function Home() {
                 >
                     {/* Top Section */}
                     <View style={styles.topView}>
-                        <Pressable onPress={()=>setmenuVisisble(true)}>
+                        <Pressable onPress={() => setmenuVisisble(true)}>
                             <Ionicons name="reorder-three" size={50} />
                         </Pressable>
                         <Pressable
@@ -50,7 +50,7 @@ export default function Home() {
                     <View style={styles.middleView}>
                         <Text>Recent trip detials</Text>
                     </View>
-                    <Menu menuVisisble={menuVisible} oncloseMenu={onMenuClose}/>
+                    
 
                     {/* Explore Section */}
                     <View style={styles.middleView2}>
@@ -109,14 +109,15 @@ export default function Home() {
 
                         <View style={styles.middleview2_3}>
                             <Image
-                                style={{ height: 200, width: '100%' }}
+                                style={{ height: 200, width: '100%',borderRadius:10}}
                                 source={require("@/assets/images/homepageBanner.png")}
                                 resizeMode="cover"
                             />
                         </View>
-                        <Sourcedest modalVisible={modalVisisble} onClose={onmodelClose} />
                     </View>
                 </ScrollView>
+                <Sourcedest modalVisible={modalVisisble} onClose={onmodelClose} />
+                <Menu menuVisisble={menuVisible} oncloseMenu={onMenuClose} />
             </SafeAreaView>
         </LinearGradient>
     );

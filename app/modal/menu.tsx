@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
-import { Modal, StyleSheet, Text, View } from 'react-native'
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 import UserDataStorage from '../store/UserStorage'
 type props = {
     menuVisisble: boolean,
@@ -34,13 +34,14 @@ const Menu = ({ menuVisisble, oncloseMenu }: props) => {
     return (
         <Modal
             visible={menuVisisble}
-            transparent={false}
+            transparent={true}
             animationType='fade'
-            style={style.modalStyle}
         >
             <View style={style.modelContainer}>
                 <View style={style.topview}>
-                    <Ionicons name="arrow-back" size={30} color="#000" />
+                    <Pressable onPress={oncloseMenu}>
+                        <Ionicons name="arrow-back" size={30} color="#000" />
+                    </Pressable>
                     <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 25 }}>Menu</Text>
                 </View>
                 <View style={style.middleView}>
@@ -62,40 +63,30 @@ const Menu = ({ menuVisisble, oncloseMenu }: props) => {
                 </View>
                 <View style={style.bottomView}>
                     {ManuItem.map((item, idx) => (
-                        <>
+                       <React.Fragment key={idx}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <View style={{ flexDirection: 'row', gap: 20 }} key={idx}>
-                                    <Ionicons name={item?.icon_name || ""} size={50} color="#d1d4d1" />
+                                <View style={{ flexDirection: 'row', gap: 20 }} >
+                                    <Ionicons name={item.icon_name||"accessibility"} size={50} color="#d1d4d1" />
                                     <Text style={{ fontWeight: 'bold', fontSize: 19, marginTop: 10 }}>{item.menu_name}</Text>
                                 </View>
-                                <Ionicons name="arrow-forward" size={50} color="#000000"/>
+                                <Ionicons name="arrow-forward" size={50} color="#000000" />
                             </View>
                             <View style={style.line} />
-                        </>
+                        </React.Fragment>
                     ))}
-                    <View>
-
-                    </View>
-                    <View>
-
-                    </View>
                 </View>
             </View>
         </Modal>
     )
 }
 const style = StyleSheet.create({
-    modalStyle: {
-        width: '100%',
-        height: '100%',
-    },
     TextStyle: {
         fontWeight: 'bold',
         fontSize: 19
     },
     modelContainer: {
         padding: 10,
-        backgroundColor: '#1bb196',
+        backgroundColor: '#16ecbd',
         flex: 1,
         flexDirection: 'column',
         gap: 3
@@ -105,21 +96,21 @@ const style = StyleSheet.create({
         gap: 20
     },
     middleView: {
-        backgroundColor: '#6cb7a9',
+        backgroundColor: '#099173',
         height: 170,
         borderRadius: 20,
         flexDirection: 'column',
         padding: 15
     },
     bottomView: {
-        height: '110%',
-        backgroundColor: "#83aba3",
+        height: '75%',
+        backgroundColor: "#758f8a",
         borderRadius: 20,
         padding: 15
     },
     line: {
         height: 1,
-        backgroundColor: "#ccc",
+        backgroundColor: "#ffffff",
         width: "100%",
         marginVertical: 10
     }
