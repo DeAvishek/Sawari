@@ -18,6 +18,14 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
   const [destLocation, setdestLocation] = useState<string | null>("")
   const [suggestionForSource, setsuggestionForSource] = useState<suggestionProp[]>([])
   const [suggestionForDest, setsuggestionForDest] = useState<suggestionProp[]>([])
+  const [sourceLongandLat, setsourceLongandLat] = useState({
+    longitude:"",
+    latitude:"",
+  })
+  const [destLongandLat, setdestLongandLat] = useState({
+    longitude:"",
+    latitude:"",
+  })
   useEffect(() => {
     const timer = setTimeout(() => {
       getSuggestion1(sourceLocation || "")
@@ -34,7 +42,7 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
 
   const getSuggestion1 = async (query: string) => {
     try {
-      console.log("called suggestion")
+      console.log("called suggestion") //todo to remove
       const response = await axios.get(`${URL}/get/autocomplete/${query}`)
       if (response.status === 200) {
         setsuggestionForSource(response.data)
@@ -45,13 +53,50 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
   }
   const getSuggestion2 = async (query: string) => {
     try {
-      console.log("called suggestion")
+      console.log("called suggestion") //todo to remove
       const response = await axios.get(`${URL}/get/autocomplete/${query}`)
       if (response.status === 200) {
         setsuggestionForDest(response.data)
       }
     } catch (error: any) {
       console.log("hii", error)
+    }
+  }
+  //after closing the modal
+  const AfterClosingModal = ()=>{
+    setsourceLocation("");
+    setdestLocation("");
+    setsuggestionForSource([]);
+    setsuggestionForDest([]);
+    onClose();
+  }
+  const onPressOnSourceSuggestion=({display_name,lat,lon,place_id}:suggestionProp)=>{
+    setsourceLocation(display_name);
+    setsourceLongandLat({longitude:lon,latitude:lat})
+    console.log(place_id)
+    console.log(sourceLongandLat)
+  }
+  const onPressOndestSuggestion=({display_name,lat,lon,place_id}:suggestionProp)=>{
+    setdestLocation(display_name);
+    setdestLongandLat({longitude:lon,latitude:lat})
+    console.log(place_id)
+    console.log(sourceLongandLat)
+  }
+  const onPressOnBookRide=async()=>{
+    //sent data to backend the source and destination(lat,long)
+    try {
+      const body = {
+        "sourceLongitude":sourceLongandLat.longitude,
+        "sourceLatitude":sourceLongandLat.latitude,
+        "destinationLongitude":destLongandLat.longitude,
+        "destinationLatitude":destLongandLat.latitude
+      }
+      const response = await axios.post(`${URL}/get/src_dest/direction`,body)
+      if(response.status===200){
+        console.log(response.data)
+      }
+    } catch (error:any) {
+      console.log(error.response.data)
     }
   }
   return (
@@ -65,7 +110,7 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
         <View style={styles.modalContent}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.title}>Choose Location</Text>
-            <Pressable onPress={onClose} style={{backgroundColor:'black',borderRadius:10,height:30,width:30}}>
+            <Pressable onPress={AfterClosingModal} style={{backgroundColor:'black',borderRadius:10,height:30,width:30}}>
               <Ionicons name="close-sharp" size={30} color="#d97777" />
             </Pressable>
           </View>
@@ -81,7 +126,7 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
           </View>
           <Ionicons name="arrow-down-sharp" />
           {suggestionForSource.map((item: suggestionProp, idx: number) => (
-            <Pressable key={idx} style={styles.suggestionItem} onPress={() => setsourceLocation(item.display_name)} >
+            <Pressable key={idx} style={styles.suggestionItem} onPress={()=>onPressOnSourceSuggestion(item)} >
               <Ionicons name="location" size={20} />
               <Text>{item.display_name}</Text>
             </Pressable>
@@ -99,12 +144,12 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
           </View>
 
           {suggestionForDest.map((item: suggestionProp, idx: number) => (
-            <Pressable key={idx} style={styles.suggestionItem} onPress={() => setdestLocation(item.display_name)}>
+            <Pressable key={idx} style={styles.suggestionItem} onPress={() => onPressOndestSuggestion(item)}>
               <Ionicons name="location" size={20} />
               <Text>{item.display_name}</Text>
             </Pressable>
           ))}
-          <Pressable style={styles.BookRideButton} onPress={onClose}>
+          <Pressable style={styles.BookRideButton} onPress={onPressOnBookRide}>
             <Text style={styles.closeText}>Book Ride</Text>
           </Pressable>
 

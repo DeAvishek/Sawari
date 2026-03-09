@@ -116,7 +116,6 @@ export default function Home() {
                         <Text style={{color:'#7f7f7f',fontSize:30,fontWeight:'900'}}>#GoSawari</Text>
                         <Text>India ❤️</Text>
                     </View>
-                
                 </ScrollView>
                 <Sourcedest modalVisible={modalVisisble} onClose={onmodelClose} />
                 <Menu menuVisisble={menuVisible} oncloseMenu={onMenuClose} />
