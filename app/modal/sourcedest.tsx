@@ -1,7 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import TripDtaStorage from "../store/TripGeomatryDistanceDurationStorage";
 type Props = {
   modalVisible: boolean;
   onClose: () => void;
@@ -74,14 +76,13 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
     setsourceLocation(display_name);
     setsourceLongandLat({longitude:lon,latitude:lat})
     console.log(place_id)
-    console.log(sourceLongandLat)
   }
   const onPressOndestSuggestion=({display_name,lat,lon,place_id}:suggestionProp)=>{
     setdestLocation(display_name);
     setdestLongandLat({longitude:lon,latitude:lat})
-    console.log(place_id)
-    console.log(sourceLongandLat)
   }
+  const setTripDatainStore = TripDtaStorage(state=>state.setTripData);
+  const router = useRouter();
   const onPressOnBookRide=async()=>{
     //sent data to backend the source and destination(lat,long)
     try {
@@ -93,7 +94,11 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
       }
       const response = await axios.post(`${URL}/get/src_dest/direction`,body)
       if(response.status===200){
+        //after response store it in storage
+        setTripDatainStore(sourceLocation,destLocation,response.data?.routes[0]?.geometry,response.data.routes[0].distance,response.data.routes[0].duration)
         console.log(response.data)
+        onClose()
+        router.push("/tripbooking")
       }
     } catch (error:any) {
       console.log(error.response.data)
@@ -149,9 +154,9 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
               <Text>{item.display_name}</Text>
             </Pressable>
           ))}
-          <Pressable style={styles.BookRideButton} onPress={onPressOnBookRide}>
+          <TouchableOpacity style={styles.BookRideButton} onPress={onPressOnBookRide}>
             <Text style={styles.closeText}>Book Ride</Text>
-          </Pressable>
+          </TouchableOpacity>
 
         </View>
       </View>
