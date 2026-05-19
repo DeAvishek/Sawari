@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Image,
     Pressable,
@@ -11,6 +11,7 @@ import {
     View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Websocket from "./helper/Websocket";
 import Menu from "./modal/menu";
 import Sourcedest from "./modal/sourcedest";
 import UserDataStorage from "./store/UserStorage";
@@ -26,6 +27,10 @@ export default function Home() {
     const onMenuClose = () => {
         setmenuVisisble(false)
     }
+    //open websocket connection
+    useEffect(() => {
+        Websocket.connect()
+      }, [])
     return (
         <LinearGradient colors={["#16ecbd","#16ecbd" ,"transparent"]} style={{ flex: 1 }}>
             <SafeAreaView style={{ flex: 1 }}>

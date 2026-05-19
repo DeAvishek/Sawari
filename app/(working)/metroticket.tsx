@@ -1,11 +1,11 @@
 
-
+//this page is currently for websocket checking and sending Trip demo fro  rider end 
 import { useEffect, useState } from "react";
 
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import Websocket from "../service/Websocket";
+import Websocket from "../helper/Websocket";
 const metroticket = () => {
   const [message, setmessage] = useState<{
     riderId: number | null;

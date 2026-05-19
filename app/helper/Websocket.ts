@@ -2,35 +2,35 @@ import { Client } from "@stomp/stompjs";
 import SockJs from "sockjs-client";
 
 class WebsocektServe{
-    private Stopmpclient:Client|null=null;
-    private url = "http://192.168.0.117:8088/trip"
+    private StompClient:Client|null=null;
+    private url = "http://192.168.0.117:8088/ws" //connection url
     private subscriptions: {
         topic: string;
         callback: (msg: any) => void;
     }[] = [];
     connect(){
-        if(this.Stopmpclient && this.Stopmpclient.connected){
+        if(this.StompClient && this.StompClient.connected){
             console.log("Already connected")
             return;
         }
-        this.Stopmpclient = new Client({
+        this.StompClient = new Client({
             webSocketFactory:()=>new SockJs(this.url),
             reconnectDelay: 4000,
             onConnect:()=>{
                 console.log("Connected ✅")
                 this.subscriptions.forEach(sub=>{
-                    this.Stopmpclient?.subscribe(sub.topic,sub.callback)
+                    this.StompClient?.subscribe(sub.topic,sub.callback)
                 })
             },
             onDisconnect:()=>{
                 console.log("Disconnected ✅")
             }
         })
-        return this.Stopmpclient.activate();
+        return this.StompClient.activate();
     }
     publish(destination:string,body:any){
-        if(this.Stopmpclient && this.Stopmpclient?.connected){
-            this.Stopmpclient.publish({
+        if(this.StompClient && this.StompClient?.connected){
+            this.StompClient.publish({
                 destination:destination,
                 body:JSON.stringify(body)
             })
@@ -39,12 +39,12 @@ class WebsocektServe{
     subscribe(topic:string,callback: (msg: any) => void){
         //always remeber your subscription no matter what
         this.subscriptions.push({topic,callback})
-        if(this.Stopmpclient && this.Stopmpclient?.connected){
-            this.Stopmpclient.subscribe(topic,callback)
+        if(this.StompClient && this.StompClient?.connected){
+            this.StompClient.subscribe(topic,callback)
         }
     }
     disconnect(){
-        this.Stopmpclient?.deactivate();
+        this.StompClient?.deactivate();
     }
     
 }

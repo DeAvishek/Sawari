@@ -4,6 +4,8 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import TripDtaStorage from "../store/TripGeomatryDistanceDurationStorage";
+import UserDataStorage from "../store/UserStorage";
+
 type Props = {
   modalVisible: boolean;
   onClose: () => void;
@@ -44,7 +46,7 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
 
   const getSuggestion1 = async (query: string) => {
     try {
-      console.log("called suggestion") //todo to remove
+      console.log("called suggestion for source") //todo to remove
       const response = await axios.get(`${URL}/get/autocomplete/${query}`)
       if (response.status === 200) {
         setsuggestionForSource(response.data)
@@ -55,7 +57,7 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
   }
   const getSuggestion2 = async (query: string) => {
     try {
-      console.log("called suggestion") //todo to remove
+      console.log("called suggestion for destination") //todo to remove
       const response = await axios.get(`${URL}/get/autocomplete/${query}`)
       if (response.status === 200) {
         setsuggestionForDest(response.data)
@@ -81,7 +83,9 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
     setdestLocation(display_name);
     setdestLongandLat({longitude:lon,latitude:lat})
   }
-  const setTripDatainStore = TripDtaStorage(state=>state.setTripData);
+  //storage
+  const setTripDatainStore = TripDtaStorage(state=>state.setTripData); // for setting the trip data in store
+  const {tempuserId} = UserDataStorage();
   const router = useRouter();
   const onPressOnBookRide=async()=>{
     //sent data to backend the source and destination(lat,long)
