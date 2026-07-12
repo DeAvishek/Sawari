@@ -3,9 +3,9 @@ import axios from "axios";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import sendTrip from "../helper/sendtripbyws";
 import TripDtaStorage from "../store/TripGeomatryDistanceDurationStorage";
 import UserDataStorage from "../store/UserStorage";
-
 type Props = {
   modalVisible: boolean;
   onClose: () => void;
@@ -23,12 +23,12 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
   const [suggestionForSource, setsuggestionForSource] = useState<suggestionProp[]>([])
   const [suggestionForDest, setsuggestionForDest] = useState<suggestionProp[]>([])
   const [sourceLongandLat, setsourceLongandLat] = useState({
-    longitude:"",
-    latitude:"",
+    longitude: "",
+    latitude: "",
   })
   const [destLongandLat, setdestLongandLat] = useState({
-    longitude:"",
-    latitude:"",
+    longitude: "",
+    latitude: "",
   })
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -67,44 +67,58 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
     }
   }
   //after closing the modal
-  const AfterClosingModal = ()=>{
+  const AfterClosingModal = () => {
     setsourceLocation("");
     setdestLocation("");
     setsuggestionForSource([]);
     setsuggestionForDest([]);
     onClose();
   }
-  const onPressOnSourceSuggestion=({display_name,lat,lon,place_id}:suggestionProp)=>{
+  const onPressOnSourceSuggestion = ({ display_name, lat, lon, place_id }: suggestionProp) => {
     setsourceLocation(display_name);
-    setsourceLongandLat({longitude:lon,latitude:lat})
+    setsourceLongandLat({ longitude: lon, latitude: lat })
+    console.log(place_id) //todo to remove
+  }
+  const onPressOndestSuggestion = ({ display_name, lat, lon, place_id }: suggestionProp) => {
+    setdestLocation(display_name);
+    setdestLongandLat({ longitude: lon, latitude: lat })
     console.log(place_id)
   }
-  const onPressOndestSuggestion=({display_name,lat,lon,place_id}:suggestionProp)=>{
-    setdestLocation(display_name);
-    setdestLongandLat({longitude:lon,latitude:lat})
-  }
   //storage
-  const setTripDatainStore = TripDtaStorage(state=>state.setTripData); // for setting the trip data in store
-  const {tempuserId} = UserDataStorage();
+  const setTripDatainStore = TripDtaStorage(state => state.setTripData); // for setting the trip data in store
+  const { tempuserId } = UserDataStorage();
+
   const router = useRouter();
-  const onPressOnBookRide=async()=>{
+  const onPressOnBookRide = async () => {
     //sent data to backend the source and destination(lat,long)
     try {
       const body = {
-        "sourceLongitude":sourceLongandLat.longitude,
-        "sourceLatitude":sourceLongandLat.latitude,
-        "destinationLongitude":destLongandLat.longitude,
-        "destinationLatitude":destLongandLat.latitude
+        "sourceLongitude": sourceLongandLat.longitude,
+        "sourceLatitude": sourceLongandLat.latitude,
+        "destinationLongitude": destLongandLat.longitude,
+        "destinationLatitude": destLongandLat.latitude
       }
-      const response = await axios.post(`${URL}/get/src_dest/direction`,body)
-      if(response.status===200){
+      const response = await axios.post(`${URL}/get/src_dest/direction`, body)
+      if (response.status === 200) {
         //after response store it in storage
-        setTripDatainStore(sourceLocation,destLocation,response.data?.routes[0]?.geometry,response.data.routes[0].distance,response.data.routes[0].duration)
+        setTripDatainStore(sourceLocation, destLocation, response.data?.routes[0]?.geometry, response.data.routes[0].distance, response.data.routes[0].duration)
         console.log(response.data)
         onClose()
+        //sending trip to backend---->this part will move to actual booking page so hold you nourves babe
+        sendTrip(
+          {
+            source: sourceLocation,
+            destination: destLocation,
+            geometry: response.data?.routes[0]?.geometry,
+            distance: response.data?.routes[0]?.distance,
+            duration: response.data?.routes[0]?.duration,
+            riderId: 1345 //need to modify
+          })
+          //sending trip to backend---->this part will move to actual booking page so hold you nourves babe
+        
         router.push("/tripbooking")
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error.response.data)
     }
   }
@@ -119,7 +133,7 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
         <View style={styles.modalContent}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.title}>Choose Location</Text>
-            <Pressable onPress={AfterClosingModal} style={{backgroundColor:'black',borderRadius:10,height:30,width:30}}>
+            <Pressable onPress={AfterClosingModal} style={{ backgroundColor: 'black', borderRadius: 10, height: 30, width: 30 }}>
               <Ionicons name="close-sharp" size={30} color="#d97777" />
             </Pressable>
           </View>
@@ -135,7 +149,7 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
           </View>
           <Ionicons name="arrow-down-sharp" />
           {suggestionForSource.map((item: suggestionProp, idx: number) => (
-            <Pressable key={idx} style={styles.suggestionItem} onPress={()=>onPressOnSourceSuggestion(item)} >
+            <Pressable key={idx} style={styles.suggestionItem} onPress={() => onPressOnSourceSuggestion(item)} >
               <Ionicons name="location" size={20} />
               <Text>{item.display_name}</Text>
             </Pressable>

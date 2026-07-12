@@ -6,7 +6,7 @@ type tripDatawithuser={
     geometry:string|null,
     distance:number|null,
     duration:number|null,
-    riderId:number|null
+    riderId:any
 }
 const sendTrip=({source,destination,geometry,distance,duration,riderId}:tripDatawithuser)=>{
     const data={

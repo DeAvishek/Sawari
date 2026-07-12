@@ -27,7 +27,7 @@ export default function Home() {
     const onMenuClose = () => {
         setmenuVisisble(false)
     }
-    //open websocket connection
+    //open websocket connection when navigate to the home page
     useEffect(() => {
         Websocket.connect()
       }, [])

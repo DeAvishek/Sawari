@@ -94,19 +94,18 @@ export default function Index() {
               <Controller
                 control={control}
                 name="userName"
-                render={({ field: { onChange, value } }) => (
-                  <>
+                render={({ field: { onChange, value,onBlur } }) => (
                     <TextInput
                       style={styles.Textinput}
                       placeholder="Enter your name"
                       placeholderTextColor="#999"
                       value={value}
                       onChangeText={onChange}
+                      onBlur={onBlur}
                     />
-                  </>
                 )}
               />
-              {errors.userName && <Text style={{color:'balck'}}>{errors.userName.message}</Text>}
+              {errors.userName && <Text style={{color:'red'}}>{errors.userName.message}</Text>}
 
             </View>
 
@@ -115,7 +114,7 @@ export default function Index() {
               <Controller
                 control={control}
                 name="phoneNumber"
-                render={({ field: { onChange, value } }) => (
+                render={({ field: { onChange, value,onBlur } }) => (
                   <TextInput
                     style={styles.Textinput}
                     keyboardType="phone-pad"
@@ -124,10 +123,11 @@ export default function Index() {
                     maxLength={10}
                     value={value}
                     onChangeText={onChange}
+                    onBlur={onBlur}
                   />
                 )}
               />
-              {errors.phoneNumber && <Text style={{color:"black"}}>{errors.phoneNumber.message}</Text>}
+              {errors.phoneNumber && <Text style={{color:"red"}}>{errors.phoneNumber.message}</Text>}
             </View>
           </View>
 
