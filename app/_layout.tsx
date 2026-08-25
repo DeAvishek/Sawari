@@ -11,7 +11,7 @@ export default function RootLayout() {
       <Stack.Screen name="autobooking" options={{headerShown:false}}/>
       <Stack.Screen name="(working)" options={{headerShown:false}}/>
       <Stack.Screen name="tripbooking" options={{headerShown:false}}/>
-      
+      <Stack.Screen name="signup" options={{headerShown:false}} />
     </Stack>
   );
 }

@@ -2,7 +2,7 @@ import { Server } from "@/core/Server";
 import { ENDPOINTS } from "@/core/api/auth/Endpoints";
 import { loginTypes } from "../types/login.types";
 import { signupTypes } from "../types/signup.types";
-import { verifyotpTypes } from "../types/verifyotp.types";
+import { verifyOtpTypes } from "../types/verifyotp.types";
 export class AuthApi{
     static login(data:loginTypes){
         console.log("Request has benn made to",Server.defaults.baseURL+ENDPOINTS.Auth.login);
@@ -12,7 +12,7 @@ export class AuthApi{
         console.log("Request has been made to",Server.defaults.baseURL+ENDPOINTS.Auth.signup);
         return Server.post(ENDPOINTS.Auth.signup,data);
     }
-    static verification(phoneNumber:string,data:verifyotpTypes){
+    static verification(phoneNumber:string,data:verifyOtpTypes){
         console.log("Request has been made to",Server.defaults.baseURL+ENDPOINTS.Auth.verification(phoneNumber));
         return Server.post(ENDPOINTS.Auth.verification(phoneNumber),data);
     }

@@ -1,3 +1,3 @@
-export interface verifyotpTypes{
+export interface verifyOtpTypes{
     otp:string|null
 }
