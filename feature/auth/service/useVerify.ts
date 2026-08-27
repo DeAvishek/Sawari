@@ -14,7 +14,7 @@ export function useVerify(){
             if(response.status===201){
                 //need to create user
                 console.log(response.data)
-                router.push("/signup")
+                router.push('/signup')
             }else if(response.status===200){
                 //user already exist
                 console.log(response.data);
