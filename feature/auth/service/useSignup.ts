@@ -16,7 +16,7 @@ export function useSignup(){
                 setRefreshToken(response.data.RefreshToken)
                 setUser({"userName":response.data.userName||"","userID":response.data.userId||"","role":"Rider"})
                 setVerified(data.isVerfied)
-                router.push('/locationallow')
+                router.push('/home') //need to be update to location allow
             }
         } catch (error) {
             console.log(error)

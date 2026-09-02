@@ -16,10 +16,11 @@
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png",
-        
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "permissions":["ACCESS_FINE_LOCATION"],
+      "permissions": [
+        "ACCESS_FINE_LOCATION"
+      ],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "config": {
@@ -49,9 +50,10 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission":"Allow Sawari to access your location improve your ride booking andpickup experience"
+          "locationAlwaysAndWhenInUsePermission": "Allow Sawari to access your location improve your ride booking andpickup experience"
         }
-      ]
+      ],
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true,

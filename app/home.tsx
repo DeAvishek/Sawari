@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useRouter } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import {
     Image,
     Pressable,
@@ -18,8 +18,8 @@ import UserDataStorage from "./store/UserStorage";
 export default function Home() {
     //populate jwt from store
     const { jwt_token } = UserDataStorage();
-    const [modalVisisble, setmodalVisisble] = React.useState<boolean>(false)
-    const [menuVisible, setmenuVisisble] = React.useState<boolean>(false);
+    const [modalVisisble, setmodalVisisble] =useState<boolean>(false)
+    const [menuVisible, setmenuVisisble] =useState<boolean>(false);
     const router = useRouter();
     const onmodelClose = () => {
         setmodalVisisble(false)
@@ -85,7 +85,7 @@ export default function Home() {
                                 <Text>Taxi</Text>
                             </Pressable>
 
-                            <Pressable style={styles.smallViewOfVie} onPress={() => router.push("/(working)/metroticket")}>
+                            <Pressable style={styles.smallViewOfVie} onPress={() => router.push("/haha")}>
                                 <Image
                                     style={styles.veichelimage}
                                     source={require("@/assets/images/metro.png")}
@@ -102,7 +102,7 @@ export default function Home() {
                                 </Text>
                                 <Text>An auto will arrive in 10 minutes</Text>
 
-                                <Link href="/autobooking">
+                                <Link href="/haha">
                                     <Text style={{ fontWeight: "bold" }}>Book Now</Text>
                                 </Link>
                             </View>

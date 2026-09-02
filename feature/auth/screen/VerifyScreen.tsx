@@ -34,7 +34,7 @@ const VerificationScreen = () => {
                     <View>
                         <Text style={style.TextStyle}>Enter Verification Code</Text>
                         <Text style={{ fontSize: 15 }}>Send to +91{phoneNumber?.slice(0, -6) + "******"}</Text>
-                    </View>a
+                    </View>
                 </View>
             </View>
             <VerifyForm loading={loading} timerLoading={timerLoading} timer={timer} CELL_COUNT={CELL_COUNT} />

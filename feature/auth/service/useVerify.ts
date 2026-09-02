@@ -21,7 +21,7 @@ export function useVerify(){
                 setJwt(response.data.Bearer);
                 setRefreshToken(response.data.RefreshToken)
                 setUser({"userName":response.data.userName||"","userID":response.data.userId||"","role":"Driver"})
-                router.push('/locationallow')
+                router.push("/home") //need to be update to locantion allow
             }
         } catch (error) {
             console.log(error);
