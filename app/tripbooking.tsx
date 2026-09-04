@@ -2,9 +2,9 @@ import { decode } from "@googlemaps/polyline-codec"
 import React, { useRef, useState } from 'react'
 import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import MapView, { Marker, Polyline } from 'react-native-maps'
-import TripDtaStorage from "./store/TripGeomatryDistanceDurationStorage"
+import TripDtaStorage from "@/feature/trip/store/TripGeomatryDistanceDurationStorage"
 const Tripbooking = () => {
-    const { source, destination, geometry, distance, duration } = TripDtaStorage()
+    const { geometry, distance, duration } = TripDtaStorage()
     const [sawari,setsawari] = useState<string>("")
     const [Activeitem, setActiveitem] = useState<number|null>(null)
     const polylineCoordinates = decode(geometry || "", 5).map(([lat, long]) => ({
@@ -16,24 +16,24 @@ const Tripbooking = () => {
         {
             "img_src": require("@/assets/images/cab.png"),
             "name": "Cab Non AC",
-            "price": 1000,
-            "duration": duration,
+            "price":Math.ceil((distance||1)/1000)*20,
+            "duration": ((duration||1)*2),
             "distance": distance,
             "person": 4
         },
         {
             "img_src": require("@/assets/images/cabac.png"),
             "name": "Cab AC",
-            "price": 2000,
-            "duration": duration,
+            "price":Math.ceil((distance||1)/1000)*25,
+            "duration": ((duration||1)*1.7),
             "distance": distance,
             "person": 4
         },
         {
             "img_src": require("@/assets/images/autorik.png"),
             "name": "Personal Auto Rikshaw",
-            "price": 500,
-            "duration": duration,
+            "price": Math.ceil((distance||1)/1000)*15,
+            "duration": ((duration||1)*1.9),
             "distance": distance,
             "person": 2
 
@@ -41,10 +41,10 @@ const Tripbooking = () => {
         {
             "img_src": require("@/assets/images/bikevei.png"),
             "name": "Bike",
-            "price": 500,
-            "duration": duration,
+            "price": Math.ceil((distance||1)/1000)*10,
+            "duration": ((duration||1)*1.2),
             "distance": distance,
-            "person": 2
+            "person": 1
 
         }
     ]
@@ -62,9 +62,9 @@ const Tripbooking = () => {
                                 mapRef.current?.fitToCoordinates(polylineCoordinates, {
                                     edgePadding: {
                                         top: 100,
-                                        right: 50,
+                                        right: 100,
                                         bottom: 100,
-                                        left: 50,
+                                        left: 100,
                                     },
                                     animated: true,
                                 });
@@ -103,9 +103,9 @@ const Tripbooking = () => {
 
                         <Polyline
                             coordinates={polylineCoordinates}
-                            strokeColor="#25cb8e" // fallback for when `strokeColors` is not supported by the map-provider
+                            strokeColor="#131511" // fallback for when `strokeColors` is not supported by the map-provider
                             strokeColors={[
-                                '#7F0000',
+                                '#089b3b',
                                 '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
                                 '#B24112',
                                 '#E5845C',
@@ -137,7 +137,6 @@ const Tripbooking = () => {
                 </View>
             </View>
         </ScrollView>
-        // </SafeAreaView >
     )
 }
 const styles = StyleSheet.create({

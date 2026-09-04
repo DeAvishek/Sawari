@@ -6,6 +6,8 @@ export class SearchApi{
     
     static getSuggestions(location:string){
         const jwt = AuthStore.getState().jwt;
+        // console.log(jwt)
+        console.log("Request has benn made to",Server.defaults.baseURL+EndPoints.Map.getSuggestion(location));
         return Server.get(EndPoints.Map.getSuggestion(location),{
             headers:{
                 Authorization:`Bearer ${jwt}`

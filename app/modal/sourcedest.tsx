@@ -1,27 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
-import axios from "axios";
-import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import sendTrip from "../helper/sendtripbyws";
-import TripDtaStorage from "../store/TripGeomatryDistanceDurationStorage";
-import UserDataStorage from "../store/UserStorage";
+import {getSuggestion } from "@/feature/map_search/service/useGetsuggestion";
+import { useGetgeometry } from "@/feature/map_search/service/useGetgeomatry";
+import { suggestion } from "@/feature/map_search/types/suggestion.types";
 type Props = {
   modalVisible: boolean;
   onClose: () => void;
 };
-type suggestionProp = {
-  display_name: string,
-  lat: string,
-  lon: string,
-  place_id: string
-}
 const Sourcedest = ({ modalVisible, onClose }: Props) => {
-  const URL = process.env.EXPO_PUBLIC_BACKEND_URL
   const [sourceLocation, setsourceLocation] = useState<string | null>("")
   const [destLocation, setdestLocation] = useState<string | null>("")
-  const [suggestionForSource, setsuggestionForSource] = useState<suggestionProp[]>([])
-  const [suggestionForDest, setsuggestionForDest] = useState<suggestionProp[]>([])
   const [sourceLongandLat, setsourceLongandLat] = useState({
     longitude: "",
     latitude: "",
@@ -30,42 +19,24 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
     longitude: "",
     latitude: "",
   })
+  //debouncing for source location 
+  const {suggestionForDest,suggestionForSource,useSuggestion,setsuggestionForDest,setsuggestionForSource} = getSuggestion();
+  const {loading,getPolyDistDuration} = useGetgeometry()
   useEffect(() => {
     const timer = setTimeout(() => {
-      getSuggestion1(sourceLocation || "")
+      useSuggestion({location:sourceLocation||"",type:"source"});
     }, 900);
     return () => clearTimeout(timer)
   }, [sourceLocation])
 
+  //debouncing for destination location
   useEffect(() => {
     const timer = setTimeout(() => {
-      getSuggestion2(destLocation || "")
+      useSuggestion({location:destLocation||"",type:"destination"})
     }, 900);
     return () => clearTimeout(timer)
   }, [destLocation])
 
-  const getSuggestion1 = async (query: string) => {
-    try {
-      console.log("called suggestion for source") //todo to remove
-      const response = await axios.get(`${URL}/get/autocomplete/${query}`)
-      if (response.status === 200) {
-        setsuggestionForSource(response.data)
-      }
-    } catch (error: any) {
-      console.log("hii", error)
-    }
-  }
-  const getSuggestion2 = async (query: string) => {
-    try {
-      console.log("called suggestion for destination") //todo to remove
-      const response = await axios.get(`${URL}/get/autocomplete/${query}`)
-      if (response.status === 200) {
-        setsuggestionForDest(response.data)
-      }
-    } catch (error: any) {
-      console.log("hii", error)
-    }
-  }
   //after closing the modal
   const AfterClosingModal = () => {
     setsourceLocation("");
@@ -74,54 +45,33 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
     setsuggestionForDest([]);
     onClose();
   }
-  const onPressOnSourceSuggestion = ({ display_name, lat, lon, place_id }: suggestionProp) => {
+  const onPressOnSourceSuggestion = ({ display_name, lat, lon, place_id }: suggestion) => {
     setsourceLocation(display_name);
     setsourceLongandLat({ longitude: lon, latitude: lat })
     console.log(place_id) //todo to remove
   }
-  const onPressOndestSuggestion = ({ display_name, lat, lon, place_id }: suggestionProp) => {
+  const onPressOndestSuggestion = ({ display_name, lat, lon, place_id }: suggestion) => {
     setdestLocation(display_name);
     setdestLongandLat({ longitude: lon, latitude: lat })
     console.log(place_id)
   }
-  //storage
-  const setTripDatainStore = TripDtaStorage(state => state.setTripData); // for setting the trip data in store
-  const { tempuserId } = UserDataStorage();
-
-  const router = useRouter();
-  const onPressOnBookRide = async () => {
-    //sent data to backend the source and destination(lat,long)
-    try {
+  const onPressOnBookRide =() => {
       const body = {
         "sourceLongitude": sourceLongandLat.longitude,
         "sourceLatitude": sourceLongandLat.latitude,
         "destinationLongitude": destLongandLat.longitude,
         "destinationLatitude": destLongandLat.latitude
       }
-      const response = await axios.post(`${URL}/get/src_dest/direction`, body)
-      if (response.status === 200) {
-        //after response store it in storage
-        setTripDatainStore(sourceLocation, destLocation, response.data?.routes[0]?.geometry, response.data.routes[0].distance, response.data.routes[0].duration)
-        console.log(response.data)
-        onClose()
-        //sending trip to backend---->this part will move to actual booking page so hold you nourves babe
-        sendTrip(
-          {
-            source: sourceLocation,
-            destination: destLocation,
-            geometry: response.data?.routes[0]?.geometry,
-            distance: response.data?.routes[0]?.distance,
-            duration: response.data?.routes[0]?.duration,
-            riderId: 1345 //need to modify
-          })
-          //sending trip to backend---->this part will move to actual booking page so hold you nourves babe
-        
-        router.push("/tripbooking")
-      }
-    } catch (error: any) {
-      console.log(error.response.data)
+      getPolyDistDuration(
+        { 
+          data:body,
+          sourceLocation:sourceLocation||"",
+          destLocation:destLocation||"",
+          onclose:onClose
+        }
+      )
+
     }
-  }
   return (
     <Modal
       visible={modalVisible}
@@ -148,7 +98,7 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
             />
           </View>
           <Ionicons name="arrow-down-sharp" />
-          {suggestionForSource.map((item: suggestionProp, idx: number) => (
+          {suggestionForSource.map((item: suggestion, idx: number) => (
             <Pressable key={idx} style={styles.suggestionItem} onPress={() => onPressOnSourceSuggestion(item)} >
               <Ionicons name="location" size={20} />
               <Text>{item.display_name}</Text>
@@ -166,14 +116,14 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
             />
           </View>
 
-          {suggestionForDest.map((item: suggestionProp, idx: number) => (
+          {suggestionForDest.map((item: suggestion, idx: number) => (
             <Pressable key={idx} style={styles.suggestionItem} onPress={() => onPressOndestSuggestion(item)}>
               <Ionicons name="location" size={20} />
               <Text>{item.display_name}</Text>
             </Pressable>
           ))}
           <TouchableOpacity style={styles.BookRideButton} onPress={onPressOnBookRide}>
-            <Text style={styles.closeText}>Book Ride</Text>
+            <Text style={styles.closeText}>Check Ride</Text>
           </TouchableOpacity>
 
         </View>
