@@ -11,13 +11,10 @@ import {
     View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Websocket from "./helper/Websocket";
-import Menu from "./modal/menu";
-import Sourcedest from "./modal/sourcedest";
-import UserDataStorage from "./store/UserStorage";
+import Websocket from "./utils/Websocket";
+import Menu from "@/feature/map_search/modal/menu"
+import Sourcedest from "@/feature/map_search/modal/sourcedest";
 export default function Home() {
-    //populate jwt from store
-    const { jwt_token } = UserDataStorage();
     const [modalVisisble, setmodalVisisble] =useState<boolean>(false)
     const [menuVisible, setmenuVisisble] =useState<boolean>(false);
     const router = useRouter();

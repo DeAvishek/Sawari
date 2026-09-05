@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
-import UserDataStorage from '../store/UserStorage'
+import { AuthStore } from '@/feature/auth/store/authstore'
 type props = {
     menuVisisble: boolean,
     oncloseMenu: () => void
@@ -30,7 +30,7 @@ const ManuItem = [
     }
 ]
 const Menu = ({ menuVisisble, oncloseMenu }: props) => {
-    const { user, phone_number } = UserDataStorage();
+    const { user, phoneNumber } = AuthStore();
     return (
         <Modal
             visible={menuVisisble}
@@ -49,7 +49,7 @@ const Menu = ({ menuVisisble, oncloseMenu }: props) => {
                         <Ionicons name="person-circle-outline" size={60} color="#d1d4d1" />
                         <View>
                             <Text style={style.TextStyle}>{user?.userName}</Text>
-                            <Text style={style.TextStyle}>{phone_number}</Text>
+                            <Text style={style.TextStyle}>{phoneNumber}</Text>
                         </View>
                     </View>
                     <View style={style.line} />

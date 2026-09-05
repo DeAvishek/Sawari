@@ -70,6 +70,7 @@ const Sourcedest = ({ modalVisible, onClose }: Props) => {
           onclose:onClose
         }
       )
+      AfterClosingModal()
 
     }
   return (

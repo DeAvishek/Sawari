@@ -13,6 +13,7 @@ export default function RootLayout() {
       <Stack.Screen name="tripbooking" options={{headerShown:false}}/>
       <Stack.Screen name="signup" options={{headerShown:false}} />
       <Stack.Screen name="haha" options={{headerShown:false}}/>
+      <Stack.Screen name="trippage" options={{headerShown:false}}/>
     </Stack>
   );
 }

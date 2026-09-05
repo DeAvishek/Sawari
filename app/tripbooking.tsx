@@ -3,15 +3,35 @@ import React, { useRef, useState } from 'react'
 import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import MapView, { Marker, Polyline } from 'react-native-maps'
 import TripDtaStorage from "@/feature/trip/store/TripGeomatryDistanceDurationStorage"
+import { AuthStore } from "@/feature/auth/store/authstore"
+import sendTrip from "@/feature/trip/service/sendtripbyws"
+import { router } from "expo-router"
 const Tripbooking = () => {
-    const { geometry, distance, duration } = TripDtaStorage()
+    const { source,destination,geometry, distance, duration } = TripDtaStorage()
+    const rideId = AuthStore.getState().user?.userID
     const [sawari,setsawari] = useState<string>("")
     const [Activeitem, setActiveitem] = useState<number|null>(null)
     const polylineCoordinates = decode(geometry || "", 5).map(([lat, long]) => ({
         latitude: lat,
         longitude: long
     }))
-    
+    const searchingDrivers=()=>{
+        console.log("trip send through websocket")
+        sendTrip(
+            {
+                source:source||"",
+                destination:destination||"",
+                geometry:geometry||"",
+                distance:distance,
+                duration:duration,
+                riderId:rideId,
+                longitude:polylineCoordinates[0].longitude,
+                latitude:polylineCoordinates[0].latitude
+
+            }
+        )
+        router.push('/trippage')
+    }
     const vehicleAvailable = [
         {
             "img_src": require("@/assets/images/cab.png"),
@@ -71,15 +91,6 @@ const Tripbooking = () => {
                             }
                         }}
                     >
-                        {/* <Marker
-                            coordinate={{ latitude: polylineCoordinates[0].latitude, longitude: polylineCoordinates[0].longitude }}
-                            title="driver"
-                        >
-                            <Image source={require("@/assets/images/bike.png")}
-                                style={{ height: 30, width: 30 }}
-                                resizeMode="contain"
-                            />
-                        </Marker> */}
                         <Marker
                             coordinate={{ latitude: polylineCoordinates[0].latitude, longitude: polylineCoordinates[0].longitude }}
                             title="pickup"
@@ -131,7 +142,7 @@ const Tripbooking = () => {
                             <Text style={{ marginTop: 5, fontWeight: 'bold' }}>$ {item.price}</Text>
                         </Pressable>
                     ))}
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={()=>searchingDrivers()}>
                         <Text style={{fontSize:15,fontWeight:'bold',color:'#fff'}}>Book Your {sawari||"Sawari"}</Text>
                      </TouchableOpacity>
                 </View>
